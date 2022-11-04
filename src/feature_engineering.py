@@ -1,40 +1,63 @@
 import src.config as config
-import src.data_load as data_load
+from src.data_load import DataLoader
 import pandas as pd
 import featuretools as ft
 
+class FeatureEngineer():
+  def __init__(self):
+    self.dataframes = dict()
+    self.relationships = []
+  
+  def store_features(self, features_df, path):
+    '''
+    gia na kanw store ta apotelesmata tou feature engineering se morfi json
+    '''
+    features_df.to_json(path,orient="records")
+    # records gia na einai pio readable
 
-def store_features(features_df, path):
-  '''
-  gia na kanw store ta apotelesmata tou feture engineering se morfi json
-  '''
-  features_df.to_json(path,orient="records") # records gia na einai pio readable
+  def add_dataframe(self, df_name, df, index_col):
+    self.dataframes[df_name] = (df, index_col)
 
-def dfs(customers_df, loans_df):
-  '''
-  Featuretools deep feature search
-  '''
-  relationship = [("customers", "customer_ID", "loans", "customer_ID")]
-  dataframes = dict()
+  def add_relationship(self,parent_df, parent_col, child_df, child_col):
+    '''
+    maybe i can pass it in as a tuple or implement both ways..
+    '''
+    relationship = (parent_df, parent_col, child_df, child_col)
+    self.relationships.append(relationship)
 
-  dataframes["customers"] = (customers_df,"customer_ID")
-  dataframes["loans"] = (loans_df,)
+  def dfs(self,target_df_name):
+    '''
+    > Featuretools deep feature search
 
-  customers_feature_matrix, customers_feature_defs = ft.dfs(
-    dataframes, relationships=relationship,target_dataframe_name="customers"
-  )
-  loans_feature_matrix, loans_feature_defs = ft.dfs(
-    dataframes, relationships=relationship,target_dataframe_name="loans"
-  )
-  return customers_feature_matrix, loans_feature_matrix
+    > i only pass the target_df_name, since its the only thing
+    changing between the two calls
+    '''
+    
+    feature_matrix, feature_defs = ft.dfs(
+      self.dataframes, relationships=self.relationships,
+      target_dataframe_name=target_df_name
+    ) 
+    return feature_matrix, feature_defs # ->for debug only?
+
 
 # debugging
 if __name__ == "__main__":
-  customers_df, loans_df = data_load.load_and_preprocess()
-  customers_features, loans_features = dfs(customers_df,loans_df)
-  
-  store_features(customers_features, config.features_customers_path)
-  store_features(loans_features, config.features_loans_path)
+  data_loader = DataLoader()
+  customers_df, loans_df = data_loader.load_data()
+  customers_df, loans_df = data_loader.preprocess()
+
+  feature_engineer = FeatureEngineer()
+  feature_engineer.add_dataframe("customers", customers_df, "customer_ID")
+  feature_engineer.add_dataframe("loans", loans_df,"") 
+  # an edw perasw to loan_id pernw diaforetika result... GIATI??
+  feature_engineer.add_relationship("customers","customer_ID","loans","customer_ID")
+
+  customers_features, _ = feature_engineer.dfs("customers") 
+
+  loans_features, _ = feature_engineer.dfs("loans")
+
+  feature_engineer.store_features(customers_features,config.features_customers_path)
+  feature_engineer.store_features(loans_features, config.features_loans_path)
 
   print(customers_features.head())
   print(loans_features.head())
