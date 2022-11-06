@@ -66,5 +66,31 @@ def fetch_loans_features():
 
   return loans_features
 
+@app.get("/api/features/customers/{customer_id}")
+def fetch_annual_income_for_customer(customer_id):
+  data_loader = DataLoader()
+  customers_df, _  = data_loader.load_data()
+  customers_df, _ = data_loader.preprocess()
 
+  customer_id = customers_df.loc[customers_df["customer_ID"]==customer_id]  
+  if customer_id.empty:
+    return {"Sorry":"This customer_ID doesn't exist"}
+  else:
+    customer_id_json = customer_id.to_json(orient="records")
+    customer_id_res = json.loads(customer_id_json)
+    return customer_id_res 
+
+@app.get("/api/features/loans/{customer_id}")
+def fetch_loan_with_customer_id(customer_id):
+  data_loader = DataLoader()
+  _, loans_df  = data_loader.load_data()
+  _, loans_df = data_loader.preprocess()
   
+  customer_id = loans_df.loc[loans_df["customer_ID"]==customer_id]
+  if customer_id.empty:
+    return {"Sorry":"This customer_ID doesn't exist"}
+  else:
+    customer_id_json = customer_id.to_json(orient="records")
+    customer_id_res = json.loads(customer_id_json)
+    return customer_id_res 
+
