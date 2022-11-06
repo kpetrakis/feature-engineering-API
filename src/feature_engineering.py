@@ -9,8 +9,7 @@ class FeatureEngineer():
     self.relationships = []
     self.primitives = ["sum", "std", "max", "min", "mean", "count", "percent_true","num_unique", "mode"] 
     # skew produces lots of nulls
-
-
+    # std too on some features but i let in...
 
   def store_features(self, features_df, path):
     '''

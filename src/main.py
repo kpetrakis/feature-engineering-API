@@ -16,9 +16,13 @@ def read_root():
 
 @app.get("/api/api_status")
 def fetch_api_status():
-  response = client.get("/")
+  response_root = client.get("/")
+  response_customers = client.get("/api/features/customers")
+  response_loans = client.get("/api/features/loans")
   try:
-    assert response.status_code == 200
+    assert response_root.status_code == 200
+    assert response_customers.status_codes == 200
+    assert response_loans ==200
     return {"status": "UP"}
   except Exception as e:
     return {"status":"DOWN"}
