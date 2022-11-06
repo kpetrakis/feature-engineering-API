@@ -10,6 +10,7 @@ class FeatureEngineer():
     self.primitives = ["sum", "std", "max", "min", "mean", "count", "percent_true","num_unique", "mode"] 
     # skew produces lots of nulls
     # std too on some features but i let in...
+    # percent_true is not used ->REMOVE IT
 
   def store_features(self, features_df, path):
     '''
@@ -45,23 +46,23 @@ class FeatureEngineer():
 
 
 # debugging
-if __name__ == "__main__":
-  data_loader = DataLoader()
-  customers_df, loans_df = data_loader.load_data()
-  customers_df, loans_df = data_loader.preprocess()
+# if __name__ == "__main__":
+#   data_loader = DataLoader()
+#   customers_df, loans_df = data_loader.load_data()
+#   customers_df, loans_df = data_loader.preprocess()
 
-  feature_engineer = FeatureEngineer()
-  feature_engineer.add_dataframe("customers", customers_df, "customer_ID")
-  feature_engineer.add_dataframe("loans", loans_df,"") 
-  # an edw perasw to loan_id pernw diaforetika result... GIATI??
-  feature_engineer.add_relationship("customers","customer_ID","loans","customer_ID")
+#   feature_engineer = FeatureEngineer()
+#   feature_engineer.add_dataframe("customers", customers_df, "customer_ID")
+#   feature_engineer.add_dataframe("loans", loans_df,"") 
+#   # an edw perasw to loan_id pernw diaforetika result... GIATI??
+#   feature_engineer.add_relationship("customers","customer_ID","loans","customer_ID")
 
-  customers_features, _ = feature_engineer.dfs("customers") 
+#   customers_features, _ = feature_engineer.dfs("customers") 
 
-  loans_features, _ = feature_engineer.dfs("loans")
+#   loans_features, _ = feature_engineer.dfs("loans")
 
-  feature_engineer.store_features(customers_features,config.features_customers_path)
-  feature_engineer.store_features(loans_features, config.features_loans_path)
+#   feature_engineer.store_features(customers_features,config.features_customers_path)
+#   feature_engineer.store_features(loans_features, config.features_loans_path)
 
-  print(customers_features.head())
-  print(loans_features.head())
+#   print(customers_features.head())
+#   print(loans_features.head())
