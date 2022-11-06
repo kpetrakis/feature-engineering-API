@@ -7,10 +7,9 @@ class FeatureEngineer():
   def __init__(self):
     self.dataframes = dict()
     self.relationships = []
-    self.primitives = ["sum", "std", "max", "min", "mean", "count", "percent_true","num_unique", "mode"] 
+    self.primitives = ["sum", "std", "max", "min", "mean", "count","num_unique", "mode"] 
     # skew produces lots of nulls
     # std too on some features but i let in...
-    # percent_true is not used ->REMOVE IT
 
   def store_features(self, features_df, path):
     '''
