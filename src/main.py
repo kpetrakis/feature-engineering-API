@@ -66,4 +66,5 @@ def fetch_loans_features():
 
   return loans_features
 
+
   

@@ -7,7 +7,11 @@ class FeatureEngineer():
   def __init__(self):
     self.dataframes = dict()
     self.relationships = []
-  
+    self.primitives = ["sum", "std", "max", "min", "mean", "count", "percent_true","num_unique", "mode"] 
+    # skew produces lots of nulls
+
+
+
   def store_features(self, features_df, path):
     '''
     gia na kanw store ta apotelesmata tou feature engineering se morfi json
@@ -35,6 +39,7 @@ class FeatureEngineer():
     
     feature_matrix, feature_defs = ft.dfs(
       self.dataframes, relationships=self.relationships,
+      agg_primitives = self.primitives,
       target_dataframe_name=target_df_name
     ) 
     return feature_matrix, feature_defs # ->for debug only?
