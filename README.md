@@ -12,6 +12,8 @@
 * ```[GET] /api/features/customers/{customer_id}```: It return the entry in the generated features dataframe for the customers with the given customer_id.
 
 * ```[GET] /api/features/loans/{customer_id}```: It returns the entry in the generated features dataframe for the loans which corresponds to the given customed_id.
+
+
 All the implemented endpoints are available at http://localhost:8000/docs/
 
 
@@ -26,7 +28,7 @@ All the implemented endpoints are available at http://localhost:8000/docs/
 export PYTHONPATH = ${PYTHONPATH}:/path/to/your/project/dir
 
 #### Deploy with docker-compose
-Execute ```docker-compose up -d --build``` \
+Execute ```docker-compose up -d --build``` 
 
 After the app starts navigate to http://localhost:8000 in your browser.
 
