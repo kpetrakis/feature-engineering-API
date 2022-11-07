@@ -1,7 +1,7 @@
 # pull the docker image
 FROM python:3.10.8-slim
 
-WORKDIR /app
+#WORKDIR /app
 
 # install dependencies
 COPY requirements.txt ./
