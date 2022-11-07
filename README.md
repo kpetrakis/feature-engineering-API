@@ -1,9 +1,12 @@
 # Feature Engineering API
+The goal of this project was to create an API (with fastAPI framework) for a feature engineering process. The are 2 main endpoints for the API. The first one returns the results of the 'feature engineering' process in a JSON forma. The second just checks if the API is up and running. 
 
 ## ENDPOINTS
-* ```[GET] /api/features/customers```: The first of the 2 basic endpoints asked by the project requirements. It returns all the features generated for the customers dataframe, after applying the feature engineering process. The customers dataframe contains the annual income for each customer.
+*```[GET] /api/api_status```: Returns {"status":"UP"} if the API is up and running.
 
-* ```[GET] /api/features/loans```: It returns all the features generated for the loans dataframe, after applying the feature engineering process. Loans dataframe corresponds to the dataframe produced by the json file provided.
+* ```[GET] /api/features/customers```: Part of the second of the 2 basic endpoints asked by the project requirements. It returns all the features generated for the customers dataframe, after applying the feature engineering process. The customers dataframe contains the annual income for each customer.
+
+* ```[GET] /api/features/loans```: The other part of the second of the 2 main endpoints. It returns all the features generated for the loans dataframe, after applying the feature engineering process. Loans dataframe corresponds to the dataframe produced by the json file provided.
 
 * ```[GET] /api/customers/{customer_id}```: It return the entry in the customers dataframe (customer_ID, annual_income) corresponding to the given customer id. 
 
@@ -13,7 +16,7 @@
 
 * ```[GET] /api/features/loans/{customer_id}```: It returns the entry in the generated features dataframe for the loans which corresponds to the given customed_id.
 
-
+#### Endpoints summary
 All the implemented endpoints are available at http://localhost:8000/docs/
 
 
@@ -32,8 +35,6 @@ Execute ```docker-compose up -d --build```
 
 After the app starts navigate to http://localhost:8000 in your browser.
 
-#### Endpoints summary
-Navigate to http://localhost:8000/docs/
 
 #### Stop and remove container
 ```docker-compose down```
