@@ -70,8 +70,11 @@ def fetch_loans_features():
 
   return loans_features
 
-@app.get("/api/features/customers/{customer_id}")
+@app.get("/api/customers/{customer_id}")
 def fetch_annual_income_for_customer(customer_id):
+  '''
+  return the customer id with the annual income
+  '''
   data_loader = DataLoader()
   customers_df, _  = data_loader.load_data()
   customers_df, _ = data_loader.preprocess()
@@ -84,8 +87,11 @@ def fetch_annual_income_for_customer(customer_id):
     customer_id_res = json.loads(customer_id_json)
     return customer_id_res 
 
-@app.get("/api/features/loans/{customer_id}")
-def fetch_loan_with_customer_id(customer_id):
+@app.get("/api/loans/{customer_id}")
+def fetch_loan_with_customer_id(customer_id: str):
+  '''
+  return the loan entry corresponding to the customer_id
+  '''
   data_loader = DataLoader()
   _, loans_df  = data_loader.load_data()
   _, loans_df = data_loader.preprocess()
@@ -98,3 +104,52 @@ def fetch_loan_with_customer_id(customer_id):
     customer_id_res = json.loads(customer_id_json)
     return customer_id_res 
 
+@app.get("/api/features/customers/{customer_id}")
+def fetch_customer_features_with_customer_id(customer_id):
+  '''
+  return the customer features with the given customer_id
+  '''
+  data_loader = DataLoader() 
+  customers_df, loans_df = data_loader.load_data()
+  customers_df, loans_df = data_loader.preprocess()
+
+  feature_engineer = FeatureEngineer()
+  feature_engineer.add_dataframe("customers", customers_df, "customer_ID")
+  feature_engineer.add_dataframe("loans", loans_df, "") 
+  # an edw perasw to loan_id pernw diaforetika result... GIATI??
+  feature_engineer.add_relationship("customers","customer_ID","loans","customer_ID")
+
+  customers_features_df, _ = feature_engineer.dfs("customers") 
+  customer_id = customers_features_df.loc[customers_df['customer_ID']==customer_id]
+  # index me to customers_df !!!
+  if customer_id.empty:
+    return {"Sorry":"This customer_ID doesn't exist"}
+  else:
+    customer_id_json = customer_id.to_json(orient="records")
+    customer_id_res = json.loads(customer_id_json)
+    return customer_id_res 
+
+@app.get("/api/features/loans/{customer_id}")
+def fetch_loan_features_with_customer_id(customer_id: str):
+  '''
+  return the loan features with the customer_id
+  '''
+  data_loader = DataLoader()
+  customers_df, loans_df = data_loader.load_data()
+  customers_df, loans_df = data_loader.preprocess()
+
+  feature_engineer = FeatureEngineer()
+  feature_engineer.add_dataframe("customers", customers_df, "customer_ID")
+  feature_engineer.add_dataframe("loans", loans_df, "") 
+  # an edw perasw to loan_id pernw diaforetika result... GIATI??
+  feature_engineer.add_relationship("customers","customer_ID","loans","customer_ID")
+
+  loans_features_df, _ = feature_engineer.dfs("loans") 
+  customer_id = loans_features_df.loc[loans_df["customer_ID"]==customer_id]
+  # index me to loans_df !!!
+  if customer_id.empty:
+    return {"Sorry":"This customer_ID doesn't exist"}
+  else:
+    customer_id_json = customer_id.to_json(orient="records")
+    customer_id_res = json.loads(customer_id_json)
+    return customer_id_res 
