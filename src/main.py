@@ -21,8 +21,8 @@ def fetch_api_status():
   response_loans = client.get("/api/features/loans")
   try:
     assert response_root.status_code == 200
-    assert response_customers.status_codes == 200
-    assert response_loans ==200
+    assert response_customers.status_code == 200
+    assert response_loans.status_code == 200
     return {"status": "UP"}
   except Exception as e:
     return {"status":"DOWN"}
