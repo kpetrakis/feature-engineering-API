@@ -1,0 +1,9 @@
+version: "3"
+services:
+ api:
+  build: ./ #the path to the Dockerfile
+	image: /api/demo-docker
+	command: uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+	ports:
+	 - 8000:8000 # host_port:container_port
+
